@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 import './SongSearch.css';
+const BASE_URL = process.env.REACT_APP_BACKEND_URL;
+
 
 const SpotifyIcon = () => (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="#1DB954" xmlns="http://www.w3.org/2000/svg">
@@ -58,7 +60,7 @@ const SongSearch = ({ onAddSong }) => {
 
         setStatus('loading');
         const debounceTimer = setTimeout(() => {
-            const API_ENDPOINT = `http://localhost:5055/api/search/spotify?q=${encodeURIComponent(query)}`;
+            const API_ENDPOINT = `${BASE_URL}/api/search/spotify?q=${encodeURIComponent(query)}`;
 
             axios.get(API_ENDPOINT)
                 .then(response => {

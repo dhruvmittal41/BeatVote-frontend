@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import './LandingPage.css';
 import axios from 'axios';
+const BASE_URL = process.env.REACT_APP_BACKEND_URL;
+
 
 // Reusable SVG Icon Components
 const SpotifyLogo = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.43 17.51c-.22.35-.66.46-.99.24-2.85-1.74-6.35-2.12-10.61-1.16-.42.1-.85-.13-.95-.55-.1-.42.13-.85.55-.95C11.12 14.1 14.99 14.5 18.17 16.4c.33.2.44.64.24.99v.02zm1.12-2.31c-.27.43-.8.56-1.23.28-3.2-1.95-7.97-2.54-11.75-1.39-.5.15-1.02-.19-1.17-.68-.15-.5.19-1.02.68-1.17 4.26-1.28 9.48-.63 13.12 1.52.43.27.56.8.28 1.23v.01zM19.9 12.6c-.32.51-.96.67-1.47.35-3.67-2.22-9.9-2.42-13.82-1.33-.59.16-1.2-.2-1.36-.79-.16-.59.2-1.2.79-1.36C8.84 8.4 15.63 8.61 19.8 11.1c.51.32.67.96.35 1.47v.03z"/></svg>;
@@ -58,7 +60,7 @@ const HeroSection = () => {
         console.log(`Creating and navigating to room: ${newRoomCode}`);
 
         try {
-            const res = await axios.post('http://localhost:5055/api/rooms/create', {
+            const res = await axios.post(`${BASE_URL}/api/rooms/create`, {
                 createdBy: "Anonymous", // or use actual user
                 roomCode: newRoomCode,
             });

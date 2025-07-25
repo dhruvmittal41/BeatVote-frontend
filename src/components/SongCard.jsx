@@ -125,7 +125,7 @@
 //         if (isFinalizing) return;
 //         setIsFinalizing(true);
 //         try {
-//             const res = await axios.post('http://localhost:5055/api/songs/finalize', { roomCode });
+//             const res = await axios.post('${BASE_URL}/api/songs/finalize', { roomCode });
 //             if (res.data && res.data.song) {
 //                 setWinner(res.data.song);
 //             } else {
@@ -152,7 +152,7 @@
 
 //     const handleVote = useCallback(async (songId) => {
 //         try {
-//             const res = await axios.post('http://localhost:5055/api/songs/vote', { songId });
+//             const res = await axios.post('${BASE_URL}/api/songs/vote', { songId });
 //             if (res.data && res.data.song) {
 //                 setQueue(q => q.map(song =>
 //                     song._id === songId ? { ...song, voteCount: res.data.song.voteCount } : song
@@ -187,7 +187,7 @@
 
 //         console.log("Submitting song payload:", payload);
 
-//         const res = await axios.post('http://localhost:5055/api/songs/submit', payload);
+//         const res = await axios.post('${BASE_URL}/api/songs/submit', payload);
 //         if (res.data && res.data.song) {
 //             setQueue(q => [...q, res.data.song]);
 //             showToast(`${res.data.song.title} added!`, "success");
@@ -256,8 +256,10 @@ import SongSearch from './SongSearch';
 import VoteWinnerModal from './WinnerModal';
 import RoomHeader from './RoomHeader';
 import './SongCard.css';
+const BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
-const socket = io('http://localhost:5055'); // Adjust URL as needed
+
+const socket = io(`${BASE_URL}`); // Adjust URL as needed
 
 const initialNowPlaying = {
     title: "Waiting for next song...",
@@ -362,7 +364,7 @@ function RoomPage() {
         if (isFinalizing) return;
         setIsFinalizing(true);
         try {
-            const res = await axios.post('http://localhost:5055/api/songs/finalize', { roomCode });
+            const res = await axios.post(`${BASE_URL}/api/songs/finalize`, { roomCode });
             if (res.data && res.data.song) {
                 setWinner(res.data.song);
                 socket.emit("winnerFinalized", { roomCode, song: res.data.song });
@@ -390,7 +392,7 @@ function RoomPage() {
 
     const handleVote = useCallback(async (songId) => {
         try {
-            const res = await axios.post('http://localhost:5055/api/songs/vote', { songId });
+            const res = await axios.post(`${BASE_URL}/api/songs/vote`, { songId });
             if (res.data && res.data.song) {
                 setQueue(q => q.map(song =>
                     song._id === songId ? { ...song, voteCount: res.data.song.voteCount } : song
@@ -427,7 +429,7 @@ function RoomPage() {
 
             console.log("Submitting song payload:", payload);
 
-            const res = await axios.post('http://localhost:5055/api/songs/submit', payload);
+            const res = await axios.post(`${BASE_URL}/api/songs/submit`, payload);
             if (res.data && res.data.song) {
                 setQueue(q => [...q, res.data.song]);
                 showToast(`${res.data.song.title} added!`, "success");

@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaCopy } from 'react-icons/fa';
+import './RoomHeader.css'; // Link to the new CSS file
+
+
 
 const RoomHeader = ({ roomCode, userCount }) => {
     const [copied, setCopied] = useState(false);

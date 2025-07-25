@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import './JoinRoom.css'; // Link to the new CSS file
+const BASE_URL = process.env.REACT_APP_BACKEND_URL;
+
 
 const JoinRoom = () => {
   const [name, setName] = useState('');
@@ -18,7 +20,7 @@ const JoinRoom = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:5055/api/rooms/join', {
+      const response = await fetch(`${BASE_URL}/api/rooms/join`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, roomCode }),
