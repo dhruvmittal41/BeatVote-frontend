@@ -1,0 +1,25 @@
+.room-code-copy {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+}
+
+.copy-icon {
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #00e0ff;
+    transition: transform 0.2s;
+}
+
+.copy-icon:hover {
+    transform: scale(1.2);
+}
+
+.copied-text {
+    font-size: 0.75rem;
+    color: #00ffaa;
+    margin-left: 0.5rem;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+}

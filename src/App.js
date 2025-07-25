@@ -1,24 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import LandingPage from "./components/LandingPage"; // Assuming this is the correct path
+import RoomPage from "./components/SongCard"; 
+import JoinRoom from './components/JoinRoom';   // Assuming this is the correct path
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    // The BrowserRouter component wraps your entire app, enabling routing
+    <BrowserRouter>
+      <Routes>
+        {/* Route for the landing page */}
+        <Route path="/" element={<LandingPage />} />
+        
+        {/* Route for the room page. ':roomCode' is a URL parameter */}
+        <Route path="/room/:roomCode" element={<RoomPage />} />
+        <Route path="/join" element={<JoinRoom />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
