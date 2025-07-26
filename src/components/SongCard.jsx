@@ -402,6 +402,8 @@ function RoomPage() {
                 ));
                 showToast("Vote counted!", "success");
                 socket.emit("voteUpdated", { roomCode, song: res.data.song });
+
+                socket.emit("voteStarted", { roomCode });
             }
         } catch (err) {
             console.error("Vote error:", err.message);
@@ -473,6 +475,13 @@ socket.on("userJoined", ({ username }) => {
         socket.on("userCountUpdate", count => {
             setUserCount(count);
         });
+
+        socket.on("voteStarted", () => {
+  setIsVotingActive(true);
+  setCountdown(VOTE_DURATION);
+  showToast("Voting started (live)!", "info");
+});
+
 
         return () => {
             socket.emit("leaveRoom", roomCode);
