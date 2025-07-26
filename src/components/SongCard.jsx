@@ -354,6 +354,8 @@ function RoomPage() {
     const [toast, setToast] = useState(null);
     const [winner, setWinner] = useState(null);
     const [isFinalizing, setIsFinalizing] = useState(false);
+    const [isVotingActive, setIsVotingActive] = useState(false);
+
 
     const showToast = useCallback((message, type = 'info') => {
         setToast({ id: Date.now(), message, type });
@@ -378,16 +380,18 @@ function RoomPage() {
         }
     }, [isFinalizing, roomCode, showToast]);
 
-    useEffect(() => {
-        if (winner) {
-            setNowPlaying(winner);
-            const timer = setTimeout(() => {
-                setWinner(null);
-                setQueue(q => q.filter(s => s._id !== winner._id));
-            }, 8000);
-            return () => clearTimeout(timer);
-        }
-    }, [winner]);
+   useEffect(() => {
+    if (winner) {
+        setNowPlaying(winner);
+        const timer = setTimeout(() => {
+            setWinner(null);
+            setQueue(q => q.filter(s => s._id !== winner._id));
+            setIsVotingActive(false); // ✅ Stop voting loop
+        }, 8000);
+        return () => clearTimeout(timer);
+    }
+}, [winner]);
+
 
     const handleVote = useCallback(async (songId) => {
         try {
@@ -485,8 +489,8 @@ socket.on("userJoined", ({ username }) => {
 const [countdown, setCountdown] = useState(VOTE_DURATION);
 
 useEffect(() => {
-    if (queue.length === 0 || winner) {
-        setCountdown(VOTE_DURATION); // Pause/reset if no queue or winner shown
+    if (!isVotingActive || queue.length === 0 || winner) {
+        setCountdown(VOTE_DURATION); // reset or pause
         return;
     }
 
@@ -494,16 +498,15 @@ useEffect(() => {
         setCountdown(prev => {
             if (prev <= 1) {
                 clearInterval(interval);
-                finalizeWinner(); // Auto-finalize
-                return VOTE_DURATION; // Reset for next round
+                finalizeWinner();
+                return VOTE_DURATION;
             }
             return prev - 1;
         });
     }, 1000);
 
     return () => clearInterval(interval);
-}, [finalizeWinner, queue, winner]);
-
+}, [finalizeWinner, queue, winner, isVotingActive]);
 
     return (
         <>
@@ -518,10 +521,20 @@ useEffect(() => {
                         <NowPlaying song={nowPlaying} />
                         <SongSearch onAddSong={handleAddSong} />
                       <div className="finalize-section">
-    <div className="timer-box">
-        ⏳ Next vote ends in: <strong>{countdown}s</strong>
-    </div>
-</div>
+                        {!isVotingActive ? (
+                      <button className="start-btn" onClick={() => {
+                        setIsVotingActive(true);
+                        setCountdown(VOTE_DURATION);
+                        showToast("Voting started!", "info");
+                     }}>
+      🎵                 Start Voting
+                     </button>
+                     ) : (
+                     <div className="timer-box">
+                     ⏳ Voting ends in: <strong>{countdown}s</strong>
+                    </div>
+                     )}
+                     </div>
 
 
                     </div>
