@@ -824,11 +824,12 @@ function RoomPage() {
       setUserCount(count);
     });
 
-    socket.on("voteStarted", () => {
-      setIsVotingActive(true);
-      setCountdown(VOTE_DURATION);
-      showToast("Voting started (live)!", "info");
-    });
+   socket.on("voteStarted", () => {
+  setIsVotingActive(true);
+  setCountdown(VOTE_DURATION);
+  showToast("Voting started (live)!", "info");
+});
+
 
     return () => {
       socket.emit("leaveRoom", roomCode);
@@ -855,14 +856,15 @@ function RoomPage() {
             <SongSearch onAddSong={handleAddSong} />
             <div className="finalize-section">
               {!isVotingActive ? (
-                <button className="start-btn" onClick={() => {
-                  setIsVotingActive(true);
-                  setCountdown(VOTE_DURATION);
-                  showToast("Voting started!", "info");
-                  socket.emit("voteStarted", { roomCode });
-                }}>
-                  🎵 Start Voting
-                </button>
+               <button
+  className="start-btn"
+  onClick={() => {
+    socket.emit("voteStarted", { roomCode });
+  }}
+>
+  🎵 Start Voting
+</button>
+
               ) : (
                 <div className="timer-box">
                   ⏳ Voting ends in: <strong>{countdown}s</strong>
