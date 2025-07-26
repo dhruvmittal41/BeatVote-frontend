@@ -60,7 +60,7 @@ const HeroSection = () => {
         console.log(`Creating and navigating to room: ${newRoomCode}`);
 
         try {
-            const res = await axios.post(`${BASE_URL}/api/rooms/create`, {
+            const res = await axios.post(`/api/rooms/create`, {
                 createdBy: "Anonymous", // or use actual user
                 roomCode: newRoomCode,
             });
