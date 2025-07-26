@@ -818,6 +818,7 @@ useEffect(() => {
   useEffect(() => {
     if (!isVotingActive || queue.length === 0 || winner) {
       setCountdown(VOTE_DURATION);
+     window.location.reload()
       return;
     }
 
