@@ -696,6 +696,7 @@ function RoomPage() {
   const [countdown, setCountdown] = useState(30);
   const VOTE_DURATION = 30;
   const username = localStorage.getItem('username') || 'Anonymous';
+  const [hasVoted, setHasVoted] = useState(false);
 
   const showToast = useCallback((message, type = 'info') => {
     setToast({ id: Date.now(), message, type });
@@ -734,32 +735,37 @@ function RoomPage() {
   }, [winner]);
 
   const handleVote = useCallback(async (songId) => {
-    try {
-        const username = localStorage.getItem('username') || 'Anonymous';
+  if (hasVoted) {
+    showToast("You’ve already voted in this round!", "error");
+    return;
+  }
 
-        const res = await axios.post(`${BASE_URL}/api/songs/vote`, {
-            songId,
-            username,
-            roomCode
-        });
+  try {
+    const res = await axios.post(`${BASE_URL}/api/songs/vote`, {
+      songId,
+      username,
+      roomCode
+    });
 
-        if (res.data && res.data.song) {
-            setQueue(q => q.map(song =>
-                song._id === songId ? { ...song, voteCount: res.data.song.voteCount } : song
-            ));
-            showToast("Vote counted!", "success");
-            socket.emit("voteUpdated", { roomCode, song: res.data.song });
-        }
-    } catch (err) {
-        console.error("Vote error:", err.message);
-        showToast(
-            err.response?.data?.error === "User has already voted"
-                ? "You’ve already voted in this round!"
-                : "Failed to register vote.",
-            "error"
-        );
+    if (res.data?.song) {
+      setQueue(q => q.map(song =>
+        song._id === songId ? { ...song, voteCount: res.data.song.voteCount } : song
+      ));
+      setHasVoted(true); // ✅ prevent further voting in this round
+      showToast("Vote counted!", "success");
+      socket.emit("voteUpdated", { roomCode, song: res.data.song });
     }
-}, [roomCode, showToast]);
+  } catch (err) {
+    console.error("Vote error:", err.message);
+    showToast(
+      err.response?.data?.error === "User has already voted"
+        ? "You’ve already voted in this round!"
+        : "Failed to register vote.",
+      "error"
+    );
+  }
+}, [roomCode, showToast, username, hasVoted]);
+
 
 
 useEffect(() => {
@@ -806,6 +812,8 @@ useEffect(() => {
       showToast("Failed to add song.", "error");
     }
   }, [roomCode, showToast, username]);
+
+  
 
   useEffect(() => {
     if (!isVotingActive || queue.length === 0 || winner) {
@@ -856,6 +864,8 @@ useEffect(() => {
   setIsVotingActive(true);
   setCountdown(VOTE_DURATION);
   showToast("Voting started (live)!", "info");
+
+  setHasVoted(false);
 });
 
 
