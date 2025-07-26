@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaCopy } from 'react-icons/fa';
-import './RoomHeader.css'; // Link to the new CSS file
+import './RoomHeader.css';
 
-
-
-const RoomHeader = ({ roomCode, userCount }) => {
+const RoomHeader = ({ roomCode, userCount, onStartVoting, isVotingActive, countdown }) => {
     const [copied, setCopied] = useState(false);
 
     const handleCopy = () => {
         navigator.clipboard.writeText(roomCode);
         setCopied(true);
-        setTimeout(() => setCopied(false), 2000); // Hide after 2 seconds
+        setTimeout(() => setCopied(false), 2000);
     };
 
     return (
@@ -33,9 +31,22 @@ const RoomHeader = ({ roomCode, userCount }) => {
                     {copied && <span className="copied-text">Copied!</span>}
                 </div>
             </div>
-            <div className="user-count">
-                <span className="user-icon">👤</span>
-                <span className="count">{userCount}</span>
+
+            <div className="header-controls">
+                <div className="user-count">
+                    <span className="user-icon">👤</span>
+                    <span className="count">{userCount}</span>
+                </div>
+
+                {!isVotingActive ? (
+                    <button className="start-voting-btn" onClick={onStartVoting}>
+                        🎵 Start Voting
+                    </button>
+                ) : (
+                    <div className="countdown-timer">
+                        ⏳ {countdown}s
+                    </div>
+                )}
             </div>
         </motion.header>
     );

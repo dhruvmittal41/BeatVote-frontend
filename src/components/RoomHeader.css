@@ -1,25 +1,88 @@
+.room-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    background-color: #111;
+    color: white;
+    border-bottom: 1px solid #333;
+}
+
+.room-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.room-code-label {
+    font-size: 14px;
+    opacity: 0.7;
+    margin-bottom: 4px;
+}
+
 .room-code-copy {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 10px;
     position: relative;
+}
+
+.room-code {
+    font-size: 24px;
+    font-weight: bold;
+    color: #00ffff;
 }
 
 .copy-icon {
     cursor: pointer;
-    font-size: 1.2rem;
-    color: #00e0ff;
-    transition: transform 0.2s;
+    color: white;
+    transition: color 0.3s ease;
 }
 
 .copy-icon:hover {
-    transform: scale(1.2);
+    color: #00ffff;
 }
 
 .copied-text {
-    font-size: 0.75rem;
-    color: #00ffaa;
-    margin-left: 0.5rem;
-    opacity: 0.9;
-    transition: opacity 0.3s ease;
+    position: absolute;
+    bottom: -18px;
+    left: 0;
+    font-size: 12px;
+    color: #00ffcc;
+    opacity: 0.85;
+}
+
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.user-count {
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.start-voting-btn {
+    background: linear-gradient(135deg, #00bcd4, #00ffff);
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.start-voting-btn:hover {
+    background: linear-gradient(135deg, #00e0ff, #a7ffff);
+}
+
+.countdown-timer {
+    background-color: #222;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 14px;
 }

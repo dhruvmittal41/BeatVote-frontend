@@ -877,27 +877,21 @@ useEffect(() => {
         <AnimatePresence>
           {toast && <Toast key={toast.id} message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
         </AnimatePresence>
-        <RoomHeader roomCode={roomCode} userCount={userCount} />
+       <RoomHeader
+  roomCode={roomCode}
+  userCount={userCount}
+  onStartVoting={() => {
+    socket.emit("voteStarted", { roomCode });
+  }}
+  isVotingActive={isVotingActive}
+  countdown={countdown}
+/>
+
         <main className="room-content">
           <div className="main-panel">
             <NowPlaying song={nowPlaying} />
             <SongSearch onAddSong={handleAddSong} />
             <div className="finalize-section">
-              {!isVotingActive ? (
-               <button
-  className="start-btn"
-  onClick={() => {
-    socket.emit("voteStarted", { roomCode });
-  }}
->
-  🎵 Start Voting
-</button>
-
-              ) : (
-                <div className="timer-box">
-                  ⏳ Voting ends in: <strong>{countdown}s</strong>
-                </div>
-              )}
             </div>
           </div>
           <aside className="side-panel">
