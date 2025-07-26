@@ -5,6 +5,7 @@ import './JoinRoom.css'; // Link to the new CSS file
 const BASE_URL = process.env.REACT_APP_BACKEND_URL;
 
 
+
 const JoinRoom = () => {
   const [name, setName] = useState('');
   const [roomCode, setRoomCode] = useState('');
