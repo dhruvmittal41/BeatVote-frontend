@@ -718,6 +718,7 @@ function RoomPage() {
     } finally {
       setIsFinalizing(false);
     }
+    
   }, [isFinalizing, roomCode, showToast]);
 
   useEffect(() => {
@@ -759,6 +760,20 @@ function RoomPage() {
         );
     }
 }, [roomCode, showToast]);
+
+
+useEffect(() => {
+  const fetchSongs = async () => {
+    try {
+      const res = await axios.get(`${BASE_URL}/api/songs/${roomCode}`);
+      setQueue(res.data.songs || []);
+    } catch (err) {
+      console.error("Error fetching songs:", err.message);
+    }
+  };
+
+  fetchSongs();
+}, [roomCode]);
 
 
   const handleAddSong = useCallback(async (songData) => {
