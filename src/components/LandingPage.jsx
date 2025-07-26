@@ -63,7 +63,8 @@ const HeroSection = () => {
             const res = await axios.post(`${BASE_URL}/api/rooms/create`, {
                 createdBy: "Anonymous", // or use actual user
                 roomCode: newRoomCode,
-            });
+            }).then(res => console.log('Success:', res))
+  .catch(err => console.error('Axios error:', err));
 
             if (res.data && res.data.room) {
                 navigate(`/room/${newRoomCode}`);
