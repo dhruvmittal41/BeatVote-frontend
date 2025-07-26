@@ -355,12 +355,11 @@ function RoomPage() {
     const [winner, setWinner] = useState(null);
     const [isFinalizing, setIsFinalizing] = useState(false);
 
-    const showToast = (message, type = 'info') => {
+    const showToast = useCallback((message, type = 'info') => {
         setToast({ id: Date.now(), message, type });
-    };
+    }, []);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const finalizeWinner = async () => {
+    const finalizeWinner = useCallback(async () => {
         if (isFinalizing) return;
         setIsFinalizing(true);
         try {
@@ -377,7 +376,7 @@ function RoomPage() {
         } finally {
             setIsFinalizing(false);
         }
-    };
+    }, [isFinalizing, roomCode, showToast]);
 
     useEffect(() => {
         if (winner) {
@@ -404,7 +403,7 @@ function RoomPage() {
             console.error("Vote error:", err.message);
             showToast("Failed to register vote.", "error");
         }
-    }, [roomCode]);
+    }, [roomCode, showToast]);
     const username = localStorage.getItem('username') || 'Anonymous';
 
 
@@ -439,7 +438,7 @@ function RoomPage() {
             console.error("Submit error:", err.message);
             showToast("Failed to add song.", "error");
         }
-    }, [roomCode]);
+    }, [roomCode, showToast]);
 
     const sortedQueue = [...queue].sort((a, b) => (b.voteCount || 0) - (a.voteCount || 0));
 
@@ -479,7 +478,7 @@ socket.on("userJoined", ({ username }) => {
             socket.off("userCountUpdate");
             socket.off("userJoined");
         };
-    }, [roomCode]);
+    }, [roomCode, showToast, username]);
 
     const VOTE_DURATION = 30; // seconds
 
