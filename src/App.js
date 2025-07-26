@@ -3,11 +3,13 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import LandingPage from "./components/LandingPage"; // Assuming this is the correct path
 import RoomPage from "./components/SongCard"; 
 import JoinRoom from './components/JoinRoom';   // Assuming this is the correct path
+import Footer from './components/Footer';
 
 function App() {
   return (
     // The BrowserRouter component wraps your entire app, enabling routing
     <BrowserRouter>
+    <div style={{ paddingBottom: '80px' }}> 
       <Routes>
         {/* Route for the landing page */}
         <Route path="/" element={<LandingPage />} />
@@ -16,6 +18,8 @@ function App() {
         <Route path="/room/:roomCode" element={<RoomPage />} />
         <Route path="/join" element={<JoinRoom />} />
       </Routes>
+    </div>
+    <Footer />
     </BrowserRouter>
   );
 }
