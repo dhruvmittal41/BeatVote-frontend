@@ -734,19 +734,32 @@ function RoomPage() {
 
   const handleVote = useCallback(async (songId) => {
     try {
-      const res = await axios.post(`${BASE_URL}/api/songs/vote`, { songId });
-      if (res.data?.song) {
-        setQueue(q => q.map(song =>
-          song._id === songId ? { ...song, voteCount: res.data.song.voteCount } : song
-        ));
-        showToast("Vote counted!", "success");
-        socket.emit("voteUpdated", { roomCode, song: res.data.song });
-      }
+        const username = localStorage.getItem('username') || 'Anonymous';
+
+        const res = await axios.post(`${BASE_URL}/api/songs/vote`, {
+            songId,
+            username,
+            roomCode
+        });
+
+        if (res.data && res.data.song) {
+            setQueue(q => q.map(song =>
+                song._id === songId ? { ...song, voteCount: res.data.song.voteCount } : song
+            ));
+            showToast("Vote counted!", "success");
+            socket.emit("voteUpdated", { roomCode, song: res.data.song });
+        }
     } catch (err) {
-      console.error("Vote error:", err.message);
-      showToast("Failed to register vote.", "error");
+        console.error("Vote error:", err.message);
+        showToast(
+            err.response?.data?.error === "User has already voted"
+                ? "You’ve already voted in this round!"
+                : "Failed to register vote.",
+            "error"
+        );
     }
-  }, [roomCode, showToast]);
+}, [roomCode, showToast]);
+
 
   const handleAddSong = useCallback(async (songData) => {
     try {
