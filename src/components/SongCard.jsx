@@ -729,6 +729,7 @@ function RoomPage() {
         setWinner(null);
         setQueue(q => q.filter(s => s._id !== winner._id));
         setIsVotingActive(false);
+        setHasVoted(false); 
       }, 8000);
       return () => clearTimeout(timer);
     }
@@ -818,7 +819,7 @@ useEffect(() => {
   useEffect(() => {
     if (!isVotingActive || queue.length === 0 || winner) {
       setCountdown(VOTE_DURATION);
-     window.location.reload()
+    
       return;
     }
 
