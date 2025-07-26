@@ -729,7 +729,8 @@ function RoomPage() {
         setWinner(null);
         setQueue(q => q.filter(s => s._id !== winner._id));
         setIsVotingActive(false);
-        setHasVoted(false); 
+        setHasVoted(false);
+         window.location.reload();  
       }, 8000);
       return () => clearTimeout(timer);
     }
